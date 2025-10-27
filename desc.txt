@@ -1,0 +1,7 @@
+Launch files are scripts that allow you to start multiple executables simultaneously. These executables can be:
+  Within the same C++ package
+  In different C++ packages
+  Across multiple packages, launching different executables from entirely separate packages
+Launch files help streamline the execution of complex ROS 2 systems, making it easier to manage multiple nodes and processes efficiently.
+
+  
