@@ -4,4 +4,10 @@ Launch files are scripts that allow you to start multiple executables simultaneo
   Across multiple packages, launching different executables from entirely separate packages
 Launch files help streamline the execution of complex ROS 2 systems, making it easier to manage multiple nodes and processes efficiently.
 
+
+To use launch files with C++ packages, we need the following:
+  A launch folder inside the ROS2 package.
+  A launch file inside the launch folder.
+  Ensure the launch folder is included in the CMakeLists.txt so it can be found.
+The goal is to create a launch file that can start TWO C++ executables at the same time for two different robots.
   
