@@ -11,3 +11,35 @@ To use launch files with C++ packages, we need the following:
   Ensure the launch folder is included in the CMakeLists.txt so it can be found.
 The goal is to create a launch file that can start TWO C++ executables at the same time for two different robots.
   
+
+
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='mars_rover_systems',
+            executable='heartbeat_executable',
+            output='screen'),
+        Node(
+            package='mars_rover_systems',
+            executable='heartbeat_executable2',
+            output='screen')
+    ])
+
+
+Within the LaunchDescription object, create a node and specify the following parameters:
+  package=The name of the package that contains the ROS2 program to execute.
+  executable=The name of the C++ executable defined in the CMakeLists.txt.
+  output=The type of output channel for printing the program's output.
+
+We need to configure CMakeLists.txt to ensure that ROS2 can find and access the .launch.py files in the launch folder.
+To achieve this, we need to add an install directive for the launch directory.
+This entry specifies the locations where ROS2 can find all the files in our package.
+We need to add the following to our CMakeLists.txt:
+
+# Install launch files
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}/)
+
