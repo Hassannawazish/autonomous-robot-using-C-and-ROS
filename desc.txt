@@ -43,3 +43,8 @@ We need to add the following to our CMakeLists.txt:
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}/)
 
+## Package Creation and compilation
+  ros2 pkg create --build-type ament_cmake mars_rover_systems --dependencies rclcpp
+  colcon build --packages-select mars_rover_systems
+  ros2 launch <ros2_package_name> <launch_file_name.launch.py>
+  ros2 run mars_rover_tasks subscriber_obstacle_detector_executable
