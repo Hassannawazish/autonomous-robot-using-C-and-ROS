@@ -12,7 +12,6 @@ class ObstacleAvoidanceNode : public rclcpp::Node {
 public:
   ObstacleAvoidanceNode(const std::string &node_name = "obstacle_avoidance_node")
   : Node(node_name) {
-    // ---- Parameters (can be overridden via ROS params) ----
     declare_parameter("safe_distance", 0.50);        // front clear if > this
     declare_parameter("emergency_distance", 0.25);   // immediate backup if < this
     declare_parameter("clear_margin", 0.05);         // hysteresis margin
@@ -28,24 +27,18 @@ public:
     declare_parameter("side_deg_min", 40.0);         // start of left/right sectors (deg)
     declare_parameter("side_deg_max", 90.0);         // end of left/right sectors (deg)
 
-    // QoS: TurtleBot3 /scan is typically BestEffort
     auto qos = rclcpp::QoS(10).reliability(rclcpp::ReliabilityPolicy::BestEffort);
 
-    scan_sub_ = create_subscription<sensor_msgs::msg::LaserScan>(
-      "/scan", qos, std::bind(&ObstacleAvoidanceNode::scanCb, this, std::placeholders::_1));
-
+    scan_sub_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", qos, std::bind(&ObstacleAvoidanceNode::scanCb, this, std::placeholders::_1));
     cmd_pub_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
 
     double hz = get_parameter("control_rate_hz").as_double();
-    control_timer_ = create_wall_timer(
-      std::chrono::milliseconds(static_cast<int>(1000.0 / std::max(1.0, hz)) ),
-      std::bind(&ObstacleAvoidanceNode::controlStep, this));
+    control_timer_ = create_wall_timer(std::chrono::milliseconds(static_cast<int>(1000.0 / std::max(1.0, hz)) ), std::bind(&ObstacleAvoidanceNode::controlStep, this));
 
     RCLCPP_INFO(get_logger(), "Obstacle avoidance node ready for TurtleBot3.");
   }
 
 private:
-  // --- Types & state ---
   enum class Mode { FORWARD, TURN_LEFT, TURN_RIGHT, BACKUP };
 
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
