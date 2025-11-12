@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ros:humble-desktop  # official ROS2 Humble Docker image
+      image: osrf/ros:humble-desktop  # ✅ correct official image
 
     steps:
     - name: Checkout repository
@@ -24,4 +24,7 @@ jobs:
       run: chmod +x run.sh
 
     - name: Run script
-      run: ./run.sh
+      shell: bash
+      run: |
+        source /opt/ros/humble/setup.bash
+        ./run.sh
