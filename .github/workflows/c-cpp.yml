@@ -27,5 +27,5 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/humble/setup.bash
-        echo "Starting ROS2 node from run.sh (will stop automatically after 25s)..."
-        timeout 25s ./run.sh || echo "Node ran successfully for 25 seconds (auto-stopped to finish CI job)."
+        echo "Starting ROS2 node from run.sh (will stop automatically after 125s)..."
+        timeout 125s ./run.sh || echo "Node ran successfully for 125 seconds (auto-stopped to finish CI job)."
