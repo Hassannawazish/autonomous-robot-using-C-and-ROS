@@ -2,9 +2,9 @@ name: Run ROS2 Script
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   run-script:
@@ -18,14 +18,22 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install colcon tools
-      run: apt-get update && apt-get install -y python3-colcon-common-extensions
+      run: |
+        apt-get update
+        apt-get install -y python3-colcon-common-extensions
 
     - name: Make run.sh executable
       run: chmod +x run.sh
 
-    - name: Run script for limited time
+    - name: Run script (fail on any error)
       shell: bash
       run: |
+        set -e          # ❗ FAIL if ANY command fails
         source /opt/ros/humble/setup.bash
-        echo "Starting ROS2 node from run.sh (will stop automatically after 125s)..."
-        timeout 125s ./run.sh || echo "Node ran successfully for 125 seconds (auto-stopped to finish CI job)."
+
+        echo "Starting ROS2 node from run.sh..."
+
+        # ❗ Run run.sh with bash instead of sh
+        timeout 125s bash run.sh
+
+        echo "Finished running run.sh"
